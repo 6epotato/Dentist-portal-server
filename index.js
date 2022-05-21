@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const { json } = require('express/lib/response');
 require('dotenv').config()
 const app = express()
@@ -201,6 +201,22 @@ async function run() {
             }
 
         })
+
+        app.get('/booking/:id', verifyJWT, async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const booking = await bookingCollection.findOne(query);
+            res.send(booking);
+        })
+
+        //get all the info in payment methode
+        // app.get('booking/:id', async (req, res) => {
+        //     const id = req.params.id;
+        //     const query = { _id: ObjectId(id) };
+        //     const booking = await bookingCollection.findOne(query);
+        //     res.send(booking);
+        // })
+
 
         app.post('/booking', async (req, res) => {
             const booking = req.body;
